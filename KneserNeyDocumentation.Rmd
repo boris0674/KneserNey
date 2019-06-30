@@ -1,0 +1,67 @@
+---
+title: "Documentation for my KN Shiny App"
+author: "Boris Secciani"
+date: "30/6/2019"
+output: html_document
+---
+
+As part of the Capstone project of the Johns Hopkins Datascience Specialization in partnership with SwiftKey I decided to create this Shiny App to predict the next word in an English sentence, using the  **Kneser-Ney smoothing**  algorithm.
+
+
+
+Kneser-Ney smoothing seem to take into account cases where some words are fairly common within a corpus but mostly in a limited amount of context. The stereotypical example of this being the word “Francisco”, showing up quite often in English language texts but mostly after the word “San” and very rarely elsewhere.
+
+
+
+Here's the Wikipedia page with some math details
+
+
+
+https://en.wikipedia.org/wiki/Kneser-Ney_smoothing
+
+
+
+And here's a numerical example:
+
+
+
+
+https://medium.com/@seccon/a-simple-numerical-example-for-kneser-ney-smoothing-nlp-4600addf38b8
+
+
+
+Albeit quite complicated this algo is probably the most powerful when working with a limited amount of ngrams, prediction architectures that exploit longer term memories within a text like LSTM neural networks perform even better but it would have been difficult to deploy such a sophisticated model with limited computing power.
+
+
+
+
+**In my work I decided to use definition matrices (computed with the Quanteda package) up to fivegrams**
+
+
+Here's an example of fivegrams and their associated frequencies from my sample:
+```{r firstchunk, echo=FALSE}
+
+sepfive[3:20]
+
+```
+
+
+
+
+In order to set up the parameters I decided to follow the Chen and Goodman approach:
+
+
+
+http://u.cs.biu.ac.il/~yogo/courses/mt2013/papers/chen-goodman-99.pdf 
+
+
+
+
+I decided to offer the 3 most likely options for the following word, in order to reach the best results with a limited sample I found out the best approach was to slightly modify the algo both in terms of parameter delta and by focusing on the ngram returning at least 3 possible words. 
+
+
+
+Even with a limited sample of the original text the model, with a few adjustments it does seem to perform reasonably well in terms of accuracy and perplexity. 
+
+
+
